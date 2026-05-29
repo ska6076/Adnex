@@ -1,0 +1,50 @@
+[
+  {
+    "id": "1",
+    "name": "React.js Documentation",
+    "url": "https://react.dev",
+    "desc": "The library for web and native user interfaces. Master hooks, state, and server components of the modern era.",
+    "category": "DOCUMENTATION",
+    "tags": [
+      "ULTRA-POPULAR",
+      "MUST-KNOW",
+      "DECLARATIVE",
+      "FACEBOOK"
+    ],
+    "favorite": true,
+    "date": "2026-05-29T14:46:33.816Z",
+    "notes": "Essential guide for everyday development. Use of hooks is absolutely fundamental."
+  },
+  {
+    "id": "2",
+    "name": "Tailwind CSS Arena",
+    "url": "https://tailwindcss.com",
+    "desc": "A utility-first CSS framework packed with classes like flex, pt-4, text-center and rotate-90 that can be composed to build any design.",
+    "category": "LIBRARIES",
+    "tags": [
+      "NEON-STYLE",
+      "UTILITY-FIRST",
+      "RADICAL-SPEED",
+      "RAPID-UI"
+    ],
+    "favorite": false,
+    "date": "2026-05-29T14:46:33.816Z",
+    "notes": "Makes styling incredibly quick and avoids long styled-components code block setups."
+  },
+  {
+    "id": "3",
+    "name": "Lucide Cyber Icons",
+    "url": "https://lucide.dev",
+    "desc": "Beautiful & consistent icon toolkit made by the community. Lightweight, fast, and highly customizable SVGs.",
+    "category": "ASSETS",
+    "tags": [
+      "CLEAN-VIBE",
+      "VECTOR-GOD",
+      "LIGHTWEIGHT",
+      "CYBER-NET"
+    ],
+    "favorite": true,
+    "date": "2026-05-29T14:46:33.816Z",
+    "notes": "Best replacement for FontAwesome or Heroicons. Clean and simple layout."
+  }
+]

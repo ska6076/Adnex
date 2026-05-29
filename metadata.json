@@ -1,0 +1,6 @@
+{
+  "name": "Developer Resource Hub",
+  "description": "An elegant, Swiss typographic database of developer tools, documentation, APIs and templates, with AI-powered automatic categorization.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

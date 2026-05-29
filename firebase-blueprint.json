@@ -1,0 +1,32 @@
+{
+  "entities": {
+    "Resource": {
+      "title": "Resource",
+      "description": "A developer resource bookmark with AI-powered tags and categories.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "name": { "type": "string", "description": "High-impact developer resource title." },
+        "url": { "type": "string", "format": "uri" },
+        "desc": { "type": "string", "description": "Punchy descriptions." },
+        "category": { "type": "string", "enum": ["DOCUMENTATION", "TOOLS", "APIS", "TEMPLATES", "LIBRARIES", "TUTORIALS", "SNIPPETS", "ASSETS", "INSPIRATION"] },
+        "tags": { 
+          "type": "array", 
+          "items": { "type": "string" },
+          "description": "Vibrant, uppercase uppercase hyphenated tags." 
+        },
+        "favorite": { "type": "boolean" },
+        "date": { "type": "string", "format": "date-time" },
+        "notes": { "type": "string" },
+        "userId": { "type": "string" }
+      },
+      "required": ["id", "name", "url", "desc", "category", "tags", "favorite", "date", "userId"]
+    }
+  },
+  "firestore": {
+    "resources/{resourceId}": {
+      "schema": "Resource",
+      "description": "The collection of saved developer bookmarks."
+    }
+  }
+}

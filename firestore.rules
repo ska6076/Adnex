@@ -1,0 +1,90 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // 1. Global Safety Net: Default Deny All
+    match /{document=**} {
+      allow read, write: if false;
+    }
+
+    // 2. Global hardended security wrappers and helper primitives
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    function isEmailVerified() {
+      return request.auth.token.email_verified == true;
+    }
+
+    function isValidId(id) {
+      return id is string && id.size() <= 128 && id.matches('^[a-zA-Z0-9_\\-]+$');
+    }
+
+    function incoming() {
+      return request.resource.data;
+    }
+
+    function existing() {
+      return resource.data;
+    }
+
+    // 3. Standalone entity validation builder function
+    function isValidResource(data) {
+      return data.id is string
+        && data.id.size() <= 128
+        && data.name is string
+        && data.name.size() > 0
+        && data.name.size() <= 200
+        && data.url is string
+        && data.url.size() > 0
+        && data.url.size() <= 1000
+        && data.desc is string
+        && data.desc.size() <= 500
+        && data.category is string
+        && data.category in ['DOCUMENTATION', 'TOOLS', 'APIS', 'TEMPLATES', 'LIBRARIES', 'TUTORIALS', 'SNIPPETS', 'ASSETS', 'INSPIRATION']
+        && data.tags is list
+        && data.tags.size() <= 10
+        && (data.tags.size() == 0 || data.tags[0] is string)
+        && data.favorite is bool
+        && data.date is string
+        && data.userId is string
+        && data.userId.size() <= 128
+        && (!('notes' in data) || (data.notes is string && data.notes.size() <= 4000));
+    }
+
+    // 4. Resource Match Block
+    match /resources/{resourceId} {
+      // Validate path variables
+      allow get: if isSignedIn() && isValidId(resourceId) && existing().userId == request.auth.uid;
+      
+      // Relational querying validation check
+      allow list: if isSignedIn() && resource.data.userId == request.auth.uid;
+
+      allow create: if isSignedIn() 
+        && isEmailVerified()
+        && isValidId(resourceId)
+        && incoming().userId == request.auth.uid
+        && incoming().id == resourceId
+        && isValidResource(incoming())
+        // Require strict keys size matching on create
+        && incoming().keys().hasAll(['id', 'name', 'url', 'desc', 'category', 'tags', 'favorite', 'date', 'userId'])
+        && (incoming().keys().size() == 9 || (incoming().keys().size() == 10 && 'notes' in incoming()));
+
+      allow update: if isSignedIn()
+        && isEmailVerified()
+        && isValidId(resourceId)
+        && existing().userId == request.auth.uid
+        && incoming().userId == request.auth.uid
+        && incoming().id == resourceId
+        && isValidResource(incoming())
+        // Enforce immutability of fields: userId, date, url
+        && incoming().date == existing().date
+        && incoming().url == existing().url
+        // Whitelist allowed fields for update actions
+        && incoming().diff(existing()).affectedKeys().hasOnly(['favorite', 'notes', 'name', 'desc', 'category', 'tags']);
+
+      allow delete: if isSignedIn()
+        && isValidId(resourceId)
+        && existing().userId == request.auth.uid;
+    }
+  }
+}
